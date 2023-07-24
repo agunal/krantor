@@ -105,10 +105,3 @@ What you have to do is:
 ### Example
 ![alt text](https://i.imgur.com/1jUU1xn.png "Example of logs given by Krantor")
 
-
-## TODO
-
-* dev stuff for initial setup
-   * `go mod init gitlab.com/paulirish/krantor` and `go mod tidy`.. then `ENVS=THINGS go run main.go`
-* the syn bash script
-* setup instructions a la https://www.reddit.com/r/putdotio/comments/136u8r2/comment/jisszuf/?utm_source=reddit&utm_medium=web2x&context=3
