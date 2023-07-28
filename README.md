@@ -6,6 +6,8 @@ Includes synology build script from paulirish version too, but it is untested.
 
 Only watches one directory and sends to one put.io folder for transfer. So deploy additional containers with respective environment variables as per your needs.
 
+For API Key: https://help.put.io/en/articles/5972538-how-to-get-an-oauth-token-from-put-io
+
 To find your put.io folder id (for `PUTIO_DOWNLOAD_FOLDER_ID` docker environment variable), go into your put.io folder in your browser and copy the number in the URL:
 ```
 https://app.put.io/files/<folder-id>
