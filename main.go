@@ -52,6 +52,7 @@ func uploadTorrentToPutio(filename string, filepath string, client *putio.Client
 	}
 
 	// Using open since Upload need an *os.File variable
+	log.Println("Reading...")
 	file, err := os.Open(filename)
 	if err != nil {
 		str := fmt.Sprintf("Openfile err: %v", err)
@@ -83,12 +84,14 @@ func transferMagnetToPutio(filename string, filepath string, client *putio.Clien
 	}
 
 	// Reading the link inside the magnet file to give to Putio
+	log.Println("Reading...")
 	magnetData, err := ioutil.ReadFile(filename)
 	if err != nil {
 		str := fmt.Sprintf("Couldn't read file %v: %v", filename, err)
 		err := errors.New(str)
 		return err
 	}
+	log.Println("magnetData: ", string(magnetData))
 
 	// Using Transfer to DL file via magnet file
 	result, err := client.Transfers.Add(ctx, string(magnetData), folderID, "")
@@ -119,6 +122,8 @@ func checkFileType(filename string) (string, error) {
 }
 
 func prepareFile(event fsnotify.Event, client *putio.Client) {
+	time.Sleep(100 * time.Millisecond) // wait for WRITE event(s) to finish
+
 	var filepath string // todo, maybe remove?
 	var err error
 	var fileType string
@@ -161,9 +166,9 @@ func watchFolder(client *putio.Client) {
 				if !ok {
 					return
 				}
-				// log.Println("event:", event) // Flip on for verbose logging
-				if event.Has(fsnotify.Create) { // AFAICT, I don't need to watch for move.
-					prepareFile(event, client)
+				log.Println("event:", event) // Flip on for verbose logging
+				if event.Has(fsnotify.Create) {
+					go prepareFile(event, client) // run in separate thread
 				}
 			case err, ok := <-w.Errors:
 				if !ok {
